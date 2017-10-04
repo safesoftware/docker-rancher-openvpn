@@ -101,8 +101,11 @@ def auth_rancher_local(url, username, password):
 def auth_auth0(endpoint, client_id, client_secret, realm, username, password):
     client = GetToken(endpoint)
     try:
-        client.login(client_id, client_secret, username, password, None, realm, None)
-        auth_success(username)
+        resp = client.login(client_id, client_secret, username, password, None, realm, None)
+        if resp:
+            auth_success(username)
+        else:
+            auth_failure("Invalid credentials for username " + username)
     except Auth0Error, e:
         auth_failure('Auth0 error: ' + e.message)
 
